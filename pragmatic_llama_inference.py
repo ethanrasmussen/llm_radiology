@@ -49,7 +49,7 @@ def predict_img_labels(images, args):
     thresholds_path = os.path.join(args.vision_path, "tuned_thresholds.pt")
 
     device = 'cuda:0'
-    checkpoint = torch.load(vision_model_path)
+    checkpoint = torch.load(vision_model_path, weights_only=False)
     state_dict = checkpoint['state_dict']
     model = DenseChexpertModel()
     new_state_dict = OrderedDict()

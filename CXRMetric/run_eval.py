@@ -16,12 +16,14 @@ from CXRMetric.radgraph_evaluate_model import run_radgraph
 from CXRMetric.CheXbert.src.label import label
 
 # Paths to chexbert and radgraph models
-CHEXBERT_PATH = './models/chexbert.pth'
-RADGRAPH_PATH ='./models/radgraph.tar.gz'
+# CHEXBERT_PATH = './models/chexbert.pth'
+CHEXBERT_PATH = '/content/drive/MyDrive/LLM_RADIOLOGY/chexbert.pth'
+# RADGRAPH_PATH ='/content/drive/MyDrive/LLM_RADIOLOGY/radgraph.tar.gz'
 
 REPORT_COL_NAME = "report"
 STUDY_ID_COL_NAME = "study_id"
-COLS = ["radgraph_combined", "bertscore", "semb_score", "bleu_score"]
+# COLS = ["radgraph_combined", "bertscore", "semb_score", "bleu_score"]
+COLS = ["bertscore", "bleu_score"]
 
 CXR_LABELS = ['Atelectasis','Cardiomegaly', 'Consolidation', 'Edema', \
 'Enlarged Cardiomediastinum', 'Fracture', 'Lung Lesion','Lung Opacity', \
@@ -257,19 +259,19 @@ def calc_metric(gt_csv, pred_csv, out_csv, use_idf=False): # TODO: support singl
     pred = add_bertscore_col(gt, pred, use_idf)
 
     # run encode.py to make the semb column
-    os.system(f"mkdir -p {cache_path}")
-    os.system(f"python ./CXRMetric/CheXbert/src/encode.py \
-              -c {CHEXBERT_PATH} -d {cache_pred_csv} -o {pred_embed_path}")
-    os.system(f"python ./CXRMetric/CheXbert/src/encode.py \
-              -c {CHEXBERT_PATH} -d {cache_gt_csv} -o {gt_embed_path}")
-    pred = add_semb_col(pred, pred_embed_path, gt_embed_path)
+    # os.system(f"mkdir -p {cache_path}")
+    # os.system(f"python ./CXRMetric/CheXbert/src/encode.py \
+    #           -c {CHEXBERT_PATH} -d {cache_pred_csv} -o {pred_embed_path}")
+    # os.system(f"python ./CXRMetric/CheXbert/src/encode.py \
+    #           -c {CHEXBERT_PATH} -d {cache_gt_csv} -o {gt_embed_path}")
+    # pred = add_semb_col(pred, pred_embed_path, gt_embed_path)
 
     # run radgraph to create that column
     entities_path = os.path.join(cache_path, "entities_cache.json")
     relations_path = os.path.join(cache_path, "relations_cache.json")
-    run_radgraph(cache_gt_csv, cache_pred_csv, cache_path, RADGRAPH_PATH,
-                 entities_path, relations_path)
-    pred = add_radgraph_col(pred, entities_path, relations_path)
+    # run_radgraph(cache_gt_csv, cache_pred_csv, cache_path, RADGRAPH_PATH,
+    #              entities_path, relations_path)
+    # pred = add_radgraph_col(pred, entities_path, relations_path)
 
     # computing macro F1
     pos_f1, pos_f1_five, neg_f1, neg_f1_five, label_neg_f1 = compute_f1(gt, pred)
