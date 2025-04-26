@@ -112,12 +112,24 @@ def write_report(input_list, args):
         ).to(device)
         use_processor = True
     else:
+        # NOTE: REFACTORED FOR ALL TEXT VIA AUTO
         # -- regular LLaMA causal LM --
-        tokenizer = transformers.LlamaTokenizer.from_pretrained(args.llama_path)
-        model = transformers.LlamaForCausalLM.from_pretrained(
+        # tokenizer = transformers.LlamaTokenizer.from_pretrained(args.llama_path)
+        tokenizer = transformers.AutoTokenizer.from_pretrained(
+            args.llama_path,
+            trust_remote_code=True,
+            use_fast=True
+        )
+        # model = transformers.LlamaForCausalLM.from_pretrained(
+        #     args.llama_path,
+        #     torch_dtype=torch.float16,
+        #     device_map="auto"
+        # ).to(device)
+        model = transformers.AutoModelForCausalLM.from_pretrained(
             args.llama_path,
             torch_dtype=torch.float16,
-            device_map="auto"
+            device_map="auto",
+            trust_remote_code=True
         ).to(device)
         use_processor = False
 
