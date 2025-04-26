@@ -93,22 +93,73 @@ def format_input(df):
 # Takes in the list of formatted input (indication + labels) and writes the report
 def write_report(input_list, args):
     device = 'cuda:0'
-    model = transformers.LlamaForCausalLM.from_pretrained(args.llama_path).to(device)
-    tokenizer = transformers.LlamaTokenizer.from_pretrained(args.llama_path)
+    # model = transformers.LlamaForCausalLM.from_pretrained(args.llama_path).to(device)
+    # tokenizer = transformers.LlamaTokenizer.from_pretrained(args.llama_path)
+    
+    # choose loader based on model type:
+    if "llavamed" in args.llama_path.lower():
+        # -- LLaVA-Med image↔text model --
+        processor = transformers.AutoProcessor.from_pretrained(
+            args.llama_path,
+            trust_remote_code=True
+        )
+        model = transformers.AutoModelForImageTextToText.from_pretrained(
+            args.llama_path,
+            torch_dtype=torch.float16,
+            device_map="auto",
+            trust_remote_code=True
+        ).to(device)
+        use_processor = True
+    else:
+        # -- regular LLaMA causal LM --
+        tokenizer = transformers.LlamaTokenizer.from_pretrained(args.llama_path)
+        model = transformers.LlamaForCausalLM.from_pretrained(
+            args.llama_path,
+            torch_dtype=torch.float16,
+            device_map="auto"
+        ).to(device)
+        use_processor = False
+
 
     instructions = open(args.instruct_path).read()
     prompts = [instructions.format(input=input_example) for input_example in input_list]
 
     output = []
+    if use_processor:
+        image_list = torch.load(args.image_path)
     with torch.no_grad():
-        for i in range(len(prompts)):
-            prompt = prompts[i]
-            input_tokens = tokenizer(prompt, return_tensors="pt")
-            generate_ids = model.generate(input_tokens['input_ids'].to(device), max_length=200)
-            output_batch = tokenizer.batch_decode(generate_ids, skip_special_tokens=True)
-            output_cleaned = [example.split('Response:')[1] for example in output_batch]
-            output += output_cleaned
-            print('Completed example: {}/{}'.format(i+1, len(prompts)))
+        # for i in range(len(prompts)):
+        #     prompt = prompts[i]
+        #     input_tokens = tokenizer(prompt, return_tensors="pt")
+        #     generate_ids = model.generate(input_tokens['input_ids'].to(device), max_length=200)
+        #     output_batch = tokenizer.batch_decode(generate_ids, skip_special_tokens=True)
+        #     output_cleaned = [example.split('Response:')[1] for example in output_batch]
+        #     output += output_cleaned
+        #     print('Completed example: {}/{}'.format(i+1, len(prompts)))
+        for i, prompt in enumerate(prompts):
+            if use_processor:
+                # assume you have a parallel list of PIL images or tensors called `image_list`
+                img = image_list[i]  
+                inputs = processor(
+                    images=img,
+                    text=prompt,
+                    return_tensors="pt"
+                ).to(device)
+                gen_ids = model.generate(**inputs, max_new_tokens=200)
+                # decode via the processor
+                text_out = processor.decode(gen_ids[0], skip_special_tokens=True)
+                # if your prompt includes "Response:", split it off
+                output_cleaned = text_out.split("Response:")[-1].strip()
+                output.append(output_cleaned)
+            else:
+                toks = tokenizer(prompt, return_tensors="pt").to(device)
+                gen_ids = model.generate(**toks, max_length=200)
+                batch = tokenizer.batch_decode(gen_ids, skip_special_tokens=True)
+                cleaned = [ex.split("Response:")[-1].strip() for ex in batch]
+                output.extend(cleaned)
+
+            print(f'Completed example: {i+1}/{len(prompts)}')
+
 
     return output
 
