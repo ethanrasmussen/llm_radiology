@@ -15,7 +15,7 @@ runcmd(f"wget -r -N -c -np --user {PHYSIONET_USER} --password {PHYSIONET_PASS} -
 # Download subset of MIMIC-CXR-JPG
 MIMIC_CXR_SUBSET_SIZE = 100
 MIMIC_CXR_DATASET_PATH = ""
-runcmd(f"head -n {MIMIC_CXR_SUBSET_SIZE} {IMAGE_FILENAMES_PATH} |wget -r -N -c -np -nH --cut-dirs=1 --user {PHYSIONET_USER} --password {PHYSIONET_PASS} -i - -P {MIMIC_CXR_DATASET_PATH} --base=https://physionet.org/files/mimic-cxr-jpg/2.1.0/")
+runcmd(f"head -n {MIMIC_CXR_SUBSET_SIZE} {IMAGE_FILENAMES_PATH}/physionet.org/files/mimic-cxr-jpg/2.1.0/IMAGE_FILENAMES |wget -r -N -c -np -nH --cut-dirs=1 --user {PHYSIONET_USER} --password {PHYSIONET_PASS} -i - -P {MIMIC_CXR_DATASET_PATH} --base=https://physionet.org/files/mimic-cxr-jpg/2.1.0/")
 
 # Download MIMIC-CXR reports CSV
 MIMIC_CXR_REPORTS_PATH = ""
@@ -27,7 +27,7 @@ runcmd(f"unzip {MIMIC_CXR_REPORTS_PATH}/physionet.org/files/mimic-cxr/2.1.0/mimi
 
 # Reorganize dataset, moving JPG files, and creating CSV files to track indications & ground truth reports
 PARSED_DATASET_PATH = ""
-runcmd(f"python extract_and_gather.py {MIMIC_CXR_REPORTS_PATH}/files {MIMIC_CXR_DATASET_PATH}/files {PARSED_DATASET_PATH}")
+runcmd(f"python z0_parse_dataset.py {MIMIC_CXR_REPORTS_PATH}/files {MIMIC_CXR_DATASET_PATH}/files {PARSED_DATASET_PATH}")
 
 # Process raw JPG images into tensor file
 df = pd.read_csv(f"{PARSED_DATASET_PATH}/indications.csv").fillna("")

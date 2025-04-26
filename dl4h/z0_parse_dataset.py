@@ -58,10 +58,6 @@ def main(text_root, image_root, output_dir):
                     # skip if either section was missing
                     continue
 
-                # write rows to each CSV
-                ind_writer.writerow([study_id, indication])
-                rep_writer.writerow([study_id, impression])
-
                 # compute the matching image folder:
                 # e.g. if txt_path is TEXT/files/p12/p1201675/s56699142.txt
                 # then rel = p12/p1201675/s56699142, so image_dir = image_root/p12/p1201675/s56699142
@@ -73,6 +69,8 @@ def main(text_root, image_root, output_dir):
                     print(f"[WARN] no image folder for study {study_id}: {image_dir}")
                     continue
 
+                print(f"[!] Image folder located for {study_id}: {image_dir}")
+
                 # pick the first JPG in that folder
                 jpgs = sorted(f for f in os.listdir(image_dir)
                               if f.lower().endswith(('.jpg', '.jpeg')))
@@ -83,7 +81,11 @@ def main(text_root, image_root, output_dir):
                 src_jpg = os.path.join(image_dir, jpgs[0])
                 dst_jpg = os.path.join(output_dir, f"{study_id}.jpg")
                 try:
+                    # copy jpg to destination
                     shutil.copy2(src_jpg, dst_jpg)
+                    # write rows to each CSV
+                    ind_writer.writerow([study_id, indication])
+                    rep_writer.writerow([study_id, impression])
                 except Exception as e:
                     print(f"[ERROR] copying {src_jpg} → {dst_jpg}: {e}")
 
