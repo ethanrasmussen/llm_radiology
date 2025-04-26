@@ -1,0 +1,16 @@
+Below is an instruction describing a task, paired with input providing further context.
+
+Write a structured response clearly detailing your clinical reasoning, followed by a concise impression.
+
+### Instruction:
+Write a structured radiology impression. First, briefly reason through the provided indication and positive labels. Then clearly state the final impression.
+
+### Input:
+{input}
+
+### Response:
+Clinical Reasoning:
+- 
+
+Final Impression:
+-

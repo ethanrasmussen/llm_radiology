@@ -1,0 +1,11 @@
+Below is an instruction describing a task, paired with input providing further context.
+
+Write a response that appropriately completes the request, reasoning step-by-step before providing your final impression.
+
+### Instruction:
+Given the indication and positive labels, reason step-by-step to arrive at a concise radiological impression. Conclude your reasoning with a succinct impression statement.
+
+### Input:
+{input}
+
+### Response:
