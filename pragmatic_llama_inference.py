@@ -5,6 +5,7 @@ from collections import OrderedDict
 import argparse
 import os
 
+from torchvision.transforms import ToPILImage
 from image_model.model.my_models import DenseChexpertModel
 from format_llama_input import labels_to_eng
 
@@ -136,15 +137,27 @@ def write_report(input_list, args):
         #     output_cleaned = [example.split('Response:')[1] for example in output_batch]
         #     output += output_cleaned
         #     print('Completed example: {}/{}'.format(i+1, len(prompts)))
+        to_pil = ToPILImage() # create PIL converter
         for i, prompt in enumerate(prompts):
             if use_processor:
                 # assume you have a parallel list of PIL images or tensors called `image_list`
-                img = image_list[i]  
+                raw = image_list[i].cpu() # extract raw tensor
+                if raw.ndim == 2 or raw.shape[0] == 1: # single channel -> 3 channel for PIL
+                    raw = raw.repeat(3, *(1,))  # now [3,H,W]
+                mn, mx = raw.min(), raw.max() # min/max norm [0,1]
+                norm = (raw - mn) / (mx - mn + 1e-8)
+                pil_img = to_pil(norm)
                 inputs = processor(
-                    images=img,
+                    images=pil_img,
                     text=prompt,
                     return_tensors="pt"
                 ).to(device)
+                # img = image_list[i]  
+                # inputs = processor(
+                #     images=img,
+                #     text=prompt,
+                #     return_tensors="pt"
+                # ).to(device)
                 gen_ids = model.generate(**inputs, max_new_tokens=200)
                 # decode via the processor
                 text_out = processor.decode(gen_ids[0], skip_special_tokens=True)
