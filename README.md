@@ -55,13 +55,6 @@ NOTE: The full pipeline notebook, at [./dl4h_notebooks/LLM_Radiology_Pipeline.ip
 Note that much of the evaluation logic draws from [Yu, Endo, and Krishnan et al.](https://github.com/rajpurkarlab/CXR-Report-Metric/blob/main/CXRMetric/run_eval.py) [11], located in the file `CXRMetric/run_eval.py`
 
 
-
-## Generating reports with Pragmatic-LLaMA
-
-Insert the path to your finetuned Pragmatic-LLaMA model, path to indications, path to the directory containing the vision model and tuned classification thresholds, and specify an output path for predicted vision labels. This helps save time on subsequent runs on the same images by not having to re-run the classifier.
-
-
-
 ## References:
 
 [1] Nguyen, D., Chen, C., He, H., & Tan, C. (2023). **Pragmatic Radiology Report Generation**. *Proceedings of Machine Learning Research (ML4H)*, 225, 1–16. 2
