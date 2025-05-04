@@ -13,6 +13,7 @@ def parse_args():
     args = parser.parse_known_args()
     return args
 
+
 if __name__ == '__main__':
     args, _ = parse_args()
     calc_metric(args.gt_path, args.gen_path, args.out_path, use_idf=False)

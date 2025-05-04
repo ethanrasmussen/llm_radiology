@@ -22,9 +22,9 @@ from torch.nn.parallel import DistributedDataParallel as DDP
 from torch.distributed import init_process_group, destroy_process_group
 
 ## WANDB setup
-os.environ["WANDB_DIR"] = "/net/scratch/chacha/future_of_work/report-generation/wandb"
-os.environ["WANDB_CACHE_DIR"] = "/net/scratch/chacha/future_of_work/report-generation/wandb"
-os.environ["WANDB_CONFIG_DIR"] = "/net/scratch/chacha/future_of_work/report-generation/wandb"
+# os.environ["WANDB_DIR"] = "/net/scratch/chacha/future_of_work/report-generation/wandb"
+# os.environ["WANDB_CACHE_DIR"] = "/net/scratch/chacha/future_of_work/report-generation/wandb"
+# os.environ["WANDB_CONFIG_DIR"] = "/net/scratch/chacha/future_of_work/report-generation/wandb"
 
 ## SLURM setup. Feel free to remove this if you are not using SLURM
 slurm_job_id = os.environ.get('SLURM_JOB_ID')

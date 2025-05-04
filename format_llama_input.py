@@ -57,6 +57,7 @@ def format_input(df):
 
 
 if __name__ == '__main__':
+
     args, _ = parse_args()
 
     df_ind = pd.read_csv(args.indication_path)[['study_id','report']].drop_duplicates()
