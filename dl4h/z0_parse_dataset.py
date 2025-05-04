@@ -87,7 +87,7 @@ def main(text_root, image_root, output_dir):
                     ind_writer.writerow([study_id, indication])
                     rep_writer.writerow([study_id, impression])
                 except Exception as e:
-                    print(f"[ERROR] copying {src_jpg} → {dst_jpg}: {e}")
+                    print(f"[ERROR] copying {src_jpg} -> {dst_jpg}: {e}")
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser(

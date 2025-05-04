@@ -22,9 +22,6 @@ def save_preprocessed_data(images, txt_labels, image_labels, preprocessed_data_p
             label = image_labels[idx]
             txt_labels_group.create_dataset(str(idx), data=txt.numpy())
             img_labels_group.create_dataset(str(idx), data=label.numpy())
-            # labels_group.create_dataset(str(idx), data=image_labels[idx].numpy())
-        # for idx, (image, (txt, label)) in enumerate(zip(images)):
-        #     images_group.create_dataset(str(idx), data=image.numpy())
 
 
 def load_preprocessed_data(preprocessed_data_path):
@@ -36,19 +33,15 @@ def load_preprocessed_data(preprocessed_data_path):
         images_group = f['images']
         txt_labels_group = f['text_labels']
         img_labels_group = f['image_labels']
-        # labels_group = f['labels']
 
         for idx in range(len(images_group.keys())):
             image = torch.tensor(images_group[str(idx)])
-            # txt, label = [torch.tensor(x) for x in labels_group[str(idx)]]
             images.append(image)
 
             txt = torch.tensor(txt_labels_group[str(idx)])
             label = torch.tensor(img_labels_group[str(idx)])
             txt_labels.append(txt)
             image_labels.append(label)
-
-            # image_labels.append((txt, label))
 
     return images, image_labels, txt_labels
 
@@ -140,30 +133,6 @@ class WrappedSeq2SeqTrainingArguments():
         Whether to use generate to calculate generative metrics (ROUGE, BLEU).
     """
     cfg: str = field()
-    # sortish_sampler: bool = field(default=False, metadata={"help": "Whether to use SortishSampler or not."})
-    # predict_with_generate: bool = field(
-    #     default=False, metadata={"help": "Whether to use generate to calculate generative metrics (ROUGE, BLEU)."}
-    # )
-    # input_max_length: int = field(
-    #     default=1536, metadata={
-    #         "help": "The sequence max_length we feed into the model, the rest part will be truncated and dropped."}
-    # )
-    # # 1536 is an initial number, which is 512 for description and 1024 for the table(and other kb representation
-    # # ) + question.
-    # generation_max_length: int = field(
-    #     default=512, metadata={
-    #         "help": "The max_length to use on each evaluation loop when predict_with_generate=True."
-    #                 " Will default to the max_length value of the model configuration."}
-    # )
-    # generation_num_beams: int = field(
-    #     default=4, metadata={
-    #         "help": "The num_beams to use on each evaluation loop when predict_with_generate=True."
-    #                 " Will default to the num_beams value of the model configuration."}
-    # )
-    # load_weights_from: Optional[str] = field(
-    #     default=None, metadata={
-    #         "help": "The directory to load the model weights from."}
-    # )
 
 
 class Configure(object):

@@ -22,9 +22,6 @@ MIMIC_CXR_REPORTS_PATH = ""
 runcmd(f"wget -r -N -c -np --user {PHYSIONET_USER} --password {PHYSIONET_PASS} -P {MIMIC_CXR_REPORTS_PATH} https://physionet.org/files/mimic-cxr/2.1.0/mimic-cxr-reports.zip")
 runcmd(f"unzip {MIMIC_CXR_REPORTS_PATH}/physionet.org/files/mimic-cxr/2.1.0/mimic-cxr-reports.zip -d {MIMIC_CXR_REPORTS_PATH}")
 
-# TODO: Generate Chexbert labels
-# NOTE: This is likely not required for my current workflow
-
 # Reorganize dataset, moving JPG files, and creating CSV files to track indications & ground truth reports
 PARSED_DATASET_PATH = ""
 runcmd(f"python z0_parse_dataset.py {MIMIC_CXR_REPORTS_PATH}/files {MIMIC_CXR_DATASET_PATH}/files {PARSED_DATASET_PATH}")

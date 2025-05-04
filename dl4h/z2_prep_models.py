@@ -8,6 +8,7 @@ import os
 LLM_MODELS_DIR = ""
 
 #### PRAGMATIC LLAMA ####
+# NOTE: Use if loading checkpoints from paper/original model. Otherwise, follow the training/finetuning pipeline notebook with subset & LLaMA-2-7B.
 # FROM: https://huggingface.co/dangnguyen0420/pragmatic-llama
 # Load fused model
 model = AutoModelForCausalLM.from_pretrained(
@@ -40,61 +41,6 @@ SAVE_DIR = f"{LLM_MODELS_DIR}/radiology-llama2"
 os.makedirs(SAVE_DIR, exist_ok=True)
 model.save_pretrained(SAVE_DIR)
 AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b-hf").save_pretrained(SAVE_DIR)
-
-# TODO: Fix prep/import/save script below:
-#### RADIALOG ####
-# FROM: https://huggingface.co/ChantalPellegrini/RaDialog-interactive-radiology-report-generation
-# PAPER: https://openreview.net/pdf?id=trUvr1gSNI
-# Load model directly
-processor = AutoProcessor.from_pretrained("ChantalPellegrini/RaDialog-interactive-radiology-report-generation")
-model = AutoModelForCausalLM.from_pretrained(
-    "ChantalPellegrini/RaDialog-interactive-radiology-report-generation",
-    torch_dtype=torch.float16,
-    device_map="auto",
-)
-# Save model files
-SAVE_DIR = f"{LLM_MODELS_DIR}/radialog"
-os.makedirs(SAVE_DIR, exist_ok=True)
-model.save_pretrained(SAVE_DIR)
-processor.save_pretrained(SAVE_DIR)
-
-# TODO: Adapt things so we can run this model properly (is multi-modal, doesn't play nice)
-#### SELFSYNTHX ####
-# FROM: https://huggingface.co/YuchengShi/llava-med-v1.5-mistral-7b-chest-xray
-# PAPER: https://arxiv.org/abs/2502.14044
-# Load fused model
-model = AutoModelForImageTextToText.from_pretrained(
-    "YuchengShi/llava-med-v1.5-mistral-7b-chest-xray",
-    torch_dtype=torch.float16,
-    device_map="auto",
-    trust_remote_code=True,  # Needed because ImageTextToText models are often custom
-)
-processor = AutoProcessor.from_pretrained(
-    "YuchengShi/llava-med-v1.5-mistral-7b-chest-xray",
-    trust_remote_code=True,
-)
-# Save model files
-SAVE_DIR = f"{LLM_MODELS_DIR}/selfsynthx"
-os.makedirs(SAVE_DIR, exist_ok=True)
-model.save_pretrained(SAVE_DIR)
-processor.save_pretrained(SAVE_DIR)
-
-# TODO/NOTE: TAKES VERY LONG TIME, TRY AGAIN ON HIGH-HDD
-#### M42 HEALTH: LLAMA3-MED42-70B ####
-# FROM: https://huggingface.co/m42-health/Llama3-Med42-70B
-# PAPER: https://arxiv.org/abs/2408.06142
-# Load model directly
-model = AutoModelForCausalLM.from_pretrained(
-    "m42-health/Llama3-Med42-70B",
-    torch_dtype=torch.float16,
-    device_map="auto",
-)
-tokenizer = AutoTokenizer.from_pretrained("m42-health/Llama3-Med42-70B")
-# Save model files
-SAVE_DIR = f"{LLM_MODELS_DIR}/llama3-med42"
-os.makedirs(SAVE_DIR, exist_ok=True)
-model.save_pretrained(SAVE_DIR)
-tokenizer.save_pretrained(SAVE_DIR)
 
 #### CLINICAL-GPT ####
 # FROM: https://huggingface.co/medicalai/ClinicalGPT-base-zh
