@@ -7,7 +7,7 @@ import os
 
 LLM_MODELS_DIR = ""
 
-#### PRAGMATIC LLAMA ####
+#### PRAGMATIC LLAMA (original from paper) ####
 # NOTE: Use if loading checkpoints from paper/original model. Otherwise, follow the training/finetuning pipeline notebook with subset & LLaMA-2-7B.
 # FROM: https://huggingface.co/dangnguyen0420/pragmatic-llama
 # Load fused model
