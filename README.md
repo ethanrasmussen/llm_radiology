@@ -1,3 +1,16 @@
+# Pragmatic Radiology Report Generation: Exploring Reproducibility & Extensions
+
+By: Ethan Rasmussen (ethanmr3@illinois.edu)
+
+Read the project paper, **here**
+
+Watch the presentation, **here**
+
+## Run existing code from checkpoints for inference
+
+## Run code for training/fine-tuning
+
+
 # Codebase for Pragmatic Radiology Report Generation
 
 We expose the following functionalities discussed in the paper
