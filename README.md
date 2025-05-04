@@ -4,7 +4,7 @@ By: Ethan Rasmussen (ethanmr3@illinois.edu)
 
 To read the project paper, **[CLICK HERE](https://github.com/ethanrasmussen/llm_radiology/blob/main/CS598-DL4H-FinalPaper.pdf)**
 
-To watch the presentation, **[CLICK HERE]**
+To watch the presentation, **[CLICK HERE](https://mediaspace.illinois.edu/media/t/1_26xbhxx1)**
 
 This code mainly works for [MIMIC-CXR](https://physionet.org/content/mimic-cxr/2.0.0/), but can be adapted slightly to work with other chest X-ray datasets.
 
