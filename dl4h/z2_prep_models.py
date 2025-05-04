@@ -7,6 +7,7 @@ import os
 
 LLM_MODELS_DIR = ""
 
+
 #### PRAGMATIC LLAMA (original from paper) ####
 # NOTE: Use if loading checkpoints from paper/original model. Otherwise, follow the training/finetuning pipeline notebook with subset & LLaMA-2-7B.
 # FROM: https://huggingface.co/dangnguyen0420/pragmatic-llama
@@ -18,10 +19,45 @@ model = AutoModelForCausalLM.from_pretrained(
 )
 tokenizer = AutoTokenizer.from_pretrained("dangnguyen0420/pragmatic-llama")
 # Save model files
+SAVE_DIR = f"{LLM_MODELS_DIR}/pragmatic-llama-original"
+os.makedirs(SAVE_DIR, exist_ok=True)
+model.save_pretrained(SAVE_DIR)
+tokenizer.save_pretrained(SAVE_DIR)
+
+
+#### PRAGMATIC LLAMA-2 (reproduction) ####
+# NOTE: Pragmatic LLaMA-2, trained on MIMIC-CXR subset with pragmatic approach
+# CHECKPOINTS FOR USE: https://huggingface.co/Eraz0211/pragmatic_llama2_reproduction
+# Load fused model
+model = AutoModelForCausalLM.from_pretrained(
+    "Eraz0211/pragmatic_llama2_reproduction",
+    torch_dtype=torch.float16,
+    device_map="auto",
+)
+tokenizer = AutoTokenizer.from_pretrained("Eraz0211/pragmatic_llama2_reproduction")
+# Save model files
 SAVE_DIR = f"{LLM_MODELS_DIR}/pragmatic-llama"
 os.makedirs(SAVE_DIR, exist_ok=True)
 model.save_pretrained(SAVE_DIR)
 tokenizer.save_pretrained(SAVE_DIR)
+
+
+#### PRAGMATIC LLAMA-3 (extension) ####
+# NOTE: LLaMA-3.1-8B-Instruct, trained on MIMIC-CXR dataset with pragmatic approach
+# CHECKPOINTS FOR USE: https://huggingface.co/Eraz0211/pragmatic_llama3_extension
+# Load fused model
+model = AutoModelForCausalLM.from_pretrained(
+    "Eraz0211/pragmatic_llama3_extension",
+    torch_dtype=torch.float16,
+    device_map="auto",
+)
+tokenizer = AutoTokenizer.from_pretrained("Eraz0211/pragmatic_llama3_extension")
+# Save model files
+SAVE_DIR = f"{LLM_MODELS_DIR}/finetuned-pragmatic-llama3"
+os.makedirs(SAVE_DIR, exist_ok=True)
+model.save_pretrained(SAVE_DIR)
+tokenizer.save_pretrained(SAVE_DIR)
+
 
 #### RADIOLOGY LLAMA 2 ####
 # FROM: https://huggingface.co/allen-eric/radiology-llama2
@@ -41,6 +77,7 @@ SAVE_DIR = f"{LLM_MODELS_DIR}/radiology-llama2"
 os.makedirs(SAVE_DIR, exist_ok=True)
 model.save_pretrained(SAVE_DIR)
 AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b-hf").save_pretrained(SAVE_DIR)
+
 
 #### CLINICAL-GPT ####
 # FROM: https://huggingface.co/medicalai/ClinicalGPT-base-zh
